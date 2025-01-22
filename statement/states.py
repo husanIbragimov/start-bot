@@ -7,3 +7,4 @@ class NewStatement(StatesGroup):
     phone = State()
     job = State()
     goal = State()
+    is_verify = State()

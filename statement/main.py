@@ -5,8 +5,16 @@ from aiogram import Bot, Dispatcher
 from aiogram.types import BotCommand
 from aiogram.filters import Command
 
-from statement.funcs import start_command_answer, help_command_answer, new_statement_answer, \
-    stop_command_answer_in_states
+from statement import states
+from statement.funcs import (
+    start_command_answer,
+    help_command_answer,
+    new_statement_answer,
+    stop_command_answer,
+    new_statement_name_answer,
+    new_statement_age_answer, new_statement_phone_answer, new_statement_job_answer, new_statement_goal_answer,
+    new_statement_is_verify_answer,
+)
 
 TOKEN = environ.Env().str("TOKEN")
 
@@ -31,7 +39,13 @@ async def main():
     dp.message.register(start_command_answer, Command("start", prefix="/!"))
     dp.message.register(help_command_answer, Command("help", prefix="/!"))
     dp.message.register(new_statement_answer, Command("new", prefix="/!"))
-    dp.message.register(stop_command_answer_in_states, Command("stop", prefix="/!"))
+    dp.message.register(stop_command_answer, Command("stop", prefix="/!"))
+    dp.message.register(new_statement_name_answer, states.NewStatement.name)
+    dp.message.register(new_statement_age_answer, states.NewStatement.age)
+    dp.message.register(new_statement_phone_answer, states.NewStatement.phone)
+    dp.message.register(new_statement_job_answer, states.NewStatement.job)
+    dp.message.register(new_statement_goal_answer, states.NewStatement.goal)
+    dp.message.register(new_statement_is_verify_answer, states.NewStatement.is_verify)
 
     dp.shutdown.register(shutdown_answer)
 
