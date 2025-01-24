@@ -1,10 +1,10 @@
 import os
 from asyncio import run
 
-from aiogram import Bot, Dispatcher
+from aiogram import Bot, Dispatcher, F
 from dotenv import load_dotenv
 
-from filter import funcs
+from keyboards import funcs
 
 load_dotenv()
 
@@ -24,7 +24,8 @@ async def shutdown(bot: Bot):
 async def start():
     dp.startup.register(startup)
 
-
+    dp.message.register(funcs.cancel_markup, F.text.lower() == "cancel")
+    dp.message.register(funcs.echo)
 
     dp.shutdown.register(shutdown)
 
