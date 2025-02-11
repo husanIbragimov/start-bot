@@ -82,32 +82,33 @@ async def new_statement_goal_answer(message: Message, bot: Bot, state: FSMContex
     await message.answer(f"Maqsadingizni qabul qildim. \n\n{message.text}")
     await message.answer("Murojaatingiz qabul qilindi. Tez orada siz bilan bog'lanamiz.")
     data = await state.get_data()
+    name = data.get('name')
     statement = (
-        f"Ariza beruvchi: {data.get('name')}\n"
+        f"Ariza beruvchi: {message.from_user.mention_html(name)}\n"
         f"Yoshi: {data.get('age')}\n"
         f"Username: @{message.from_user.username}\n"
-        f"Link: {message.from_user.mention_html(f'{message.from_user.first_name}')}\n"
         f"Telefon raqami: {data.get('phone')}\n"
         f"Kasbi: {data.get('job')}\n"
         f"Maqsadi: {message.text}\n"
     )
     await message.answer(f"Arizani yuboraveraymi?\n\n{statement}\n\nHa(H) yoki yo'q(Y)?", parse_mode='HTML')
+    await state.set_state(NewStatement.is_verify)
 
 
 async def new_statement_is_verify_answer(message: Message, bot: Bot, state: FSMContext):
-    if message.text.lower() in ['ha', 'h']:
+    if message.text.lower() in ['ha', 'h', 'yes', 'y', 'xa', 'x']:
         data = await state.get_data()
+        name = data.get('name')
         statement = (
-            f"Ariza beruvchi: {data.get('name')}\n"
+            f"Ariza beruvchi: {message.from_user.mention_html(name)}\n"
             f"Yoshi: {data.get('age')}\n"
-            f"Username: @{message.from_user.username}\n"
-            f"Link: {message.from_user.mention_html(f'{message.from_user.first_name}')}\n"
             f"Username: @{message.from_user.username}\n"
             f"Link: {message.from_user.mention_html(f'{message.from_user.first_name}')}\n"
             f"Telefon raqami: {data.get('phone')}\n"
             f"Kasbi: {data.get('job')}\n"
-            f"Maqsadi: {message.text}\n"
+            f"Maqsadi: {data.get('goal')}\n"
         )
+        print(statement)
         await bot.send_message(663153232, f"Yangi ariza:\n\n{statement}", parse_mode='HTML')
         await message.answer("Arizangiz qabul qilindi. Tez orada siz bilan bog'lanamiz.")
         await state.clear()
