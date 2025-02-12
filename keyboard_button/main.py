@@ -3,12 +3,13 @@ from asyncio import run
 
 from aiogram import Bot, Dispatcher, F
 from dotenv import load_dotenv
+from aiogram.filters import CommandStart
 
-from keyboards import funcs
+from keyboard_button import funcs
 
 load_dotenv()
 
-TOKEN = os.getenv("TOKEN")
+TOKEN = os.getenv("BOT_TOKEN")
 
 dp = Dispatcher()
 
@@ -23,8 +24,10 @@ async def shutdown(bot: Bot):
 
 async def start():
     dp.startup.register(startup)
-
     dp.shutdown.register(shutdown)
+
+    dp.message.register(funcs.start_command_reply, CommandStart())
+    dp.message.register(funcs.get_contact)
 
     bot = Bot(token=TOKEN)
     await dp.start_polling(bot, polling_timeout=1)
