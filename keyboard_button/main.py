@@ -27,7 +27,8 @@ async def start():
     dp.shutdown.register(shutdown)
 
     dp.message.register(funcs.start_command_reply, CommandStart())
-    dp.message.register(funcs.get_contact)
+    dp.message.register(funcs.get_contact, F.contact)
+    dp.message.register(funcs.get_location, F.location)
 
     bot = Bot(token=TOKEN)
     await dp.start_polling(bot, polling_timeout=1)
